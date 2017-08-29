@@ -23,7 +23,6 @@ nTargets = size(Settings.targets,2);
 pixelMax = Settings.pixelMax;
 
 sampleCoords    = lib.samplePatchCoordinates(imgSizePix, [surroundSizePix surroundSizePix], spacingPix);
-sampleCoords    = sampleCoords(1:100,:);
 
 D = dir([filePathStr '/*.mat']);
 
