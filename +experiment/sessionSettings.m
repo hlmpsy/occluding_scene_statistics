@@ -180,7 +180,65 @@ elseif(strcmp(expTypeStr, 'periphery'))
         'stimulusIntervalMs', stimulusIntervalMs, 'responseIntervalMs', responseInvervalMs, ...
         'fixationIntervalMs', fixationIntervalMs, 'blankIntervalMs', blankIntervalMs, 'envelope', envelope,...
         'targetLuminance', targetLuminance, 'nDummyTrials', nDummyTrials);    
+elseif(strcmp(expTypeStr, 'periphery-additive'))
+    stimulusIntervalMs = 200;
+    responseInvervalMs = 1000;
+    fixationIntervalMs = 400;
+    blankIntervalMs    = 100;
     
+    monitorMaxPix = 255;
+    
+    imgFilePath = ImgStats.Settings.imgFilePath;
+    
+    targetIndex = lib.getTargetIndexFromString(ImgStats.Settings, targetTypeStr);
+    target = ImgStats.Settings.targets(:,:,targetIndex);
+    
+    nDummyTrials = 1;
+    
+	nLevels = size(targetLvls,2);
+	nTrials = 40 + nDummyTrials;
+	nSessions = 2;
+
+	pTarget = 0.5;
+  
+    pixelsPerDeg = 60;
+
+    stimPosDeg = zeros(nTrials, nLevels, nSubjects, nSessions, 2);
+    fixPosDeg  = zeros(nTrials, nLevels, nSubjects, nSessions, 2);
+    
+    
+    targetAmplitude = repmat(targetLvls , [nTrials, 1, nSessions]); % Amplitude
+       
+    sampleMethod = 'random';
+    imageType = 'N';
+ 
+    stimulusDistanceDeg     = 10;
+    stimPosDeg(:,:,:,:,1)     = stimulusDistanceDeg;
+	fixPosDeg(:,:,:,:,1)      = stimPosDeg(:,:,:,:,1) - repmat(targetLvls, [nTrials,1,1,nSessions]);
+
+
+	loadSessionStimuli = @experiment.loadStimuliOccluding;
+
+    bTargetPresent  = experiment.generateTargetPresentMatrix(nTrials, nLevels, nSessions, pTarget);
+    bTargetPresent(1,:,:) = 1; % Always set the first trial to be a target present trial. A single example trial.
+
+	[stimuli, stimuliIndex] = experiment.samplePatchesForExperiment(ImgStats, ...
+        targetTypeStr, binIndex, nTrials, nLevels, nSessions, sampleMethod, imageType); 
+        
+	bgPixVal = ImgStats.Settings.binCenters.L(binIndex(1)) * monitorMaxPix./100;
+    
+    envelope = ImgStats.Settings.envelope;
+
+    SessionSettings = struct('monitorMaxPix', monitorMaxPix, ...
+        'imgFilePath', imgFilePath, 'target', target, 'targetTypeStr', targetTypeStr, ...
+        'nLevels', nLevels, 'nTrials', nTrials, 'nSessions', nSessions, 'sampleMethod', sampleMethod, ...
+        'pTarget', pTarget, 'pixelsPerDeg', pixelsPerDeg, 'stimPosDeg', stimPosDeg, ...
+        'fixPosDeg', fixPosDeg, 'loadSessionStimuli', loadSessionStimuli, ...
+        'bTargetPresent', bTargetPresent, 'targetContrast', targetContrast, 'targetAmplitude', targetAmplitude,...
+        'stimuli', stimuli, 'stimuliIndex', stimuliIndex, 'bgPixVal', bgPixVal, ...
+        'stimulusIntervalMs', stimulusIntervalMs, 'responseIntervalMs', responseInvervalMs, ...
+        'fixationIntervalMs', fixationIntervalMs, 'blankIntervalMs', blankIntervalMs, 'envelope', envelope,...
+        'targetLuminance', targetLuminance, 'nDummyTrials', nDummyTrials);        
 elseif(strcmp(expTypeStr, 'phase-noise'))        
     stimulusIntervalMs = 200;
     responseInvervalMs = 1000;

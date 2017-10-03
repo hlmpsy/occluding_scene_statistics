@@ -26,37 +26,35 @@ end
 nTargets = size(targets,3);
 
 %% Calculate stats.
-Lstats  = stats.computeSceneLuminance(scene, envelope, coords);
-Cstats  = stats.computeSceneContrast(scene, envelope, coords);
-Pstats  = stats.computeScenePercentClipped(scene, envelope, coords);
+%Lstats  = stats.computeSceneLuminance(scene, envelope, coords);
+%Cstats  = stats.computeSceneContrast(scene, envelope, coords);
+%Pstats  = stats.computeScenePercentClipped(scene, envelope, coords);
 EstatsAbs  = stats.computeSceneEdgeAbs(scene, envelope, coords);
-
 for iTarget = 1:nTargets
-    Sastats  = stats.computeSceneSimilarityAmplitude(scene, targets(:,:,iTarget), envelope, coords);
-    Ssstats  = stats.computeSceneSimilaritySpatial(scene, targets(:,:,iTarget), envelope, coords);
-    Tstats   = stats.computeSceneTemplateMatch(scene, targets(:,:,iTarget), coords);
+    %Sastats  = stats.computeSceneSimilarityAmplitude(scene, targets(:,:,iTarget), envelope, coords);
+    %Ssstats  = stats.computeSceneSimilaritySpatial(scene, targets(:,:,iTarget), envelope, coords);
+    %Tstats   = stats.computeSceneTemplateMatch(scene, targets(:,:,iTarget), coords);
     
-    StatsOut.Ss{iTarget} = Ssstats.Smag;
-    StatsOut.Sa{iTarget} = Sastats.Smag;
-    StatsOut.tMatch{iTarget} = Tstats.tMatch;
+    %StatsOut.Ss{iTarget} = Ssstats.Smag;
+    %StatsOut.Sa{iTarget} = Sastats.Smag;
+    %StatsOut.tMatch{iTarget} = Tstats.tMatch;
     
     EstatsPres = stats.computeSceneEdgePres(scene, targets(:,:, iTarget), envelope, coords);
     
-    StatsOut.Ss{iTarget} = Ssstats.Smag;
-    StatsOut.Sa{iTarget} = Sastats.Smag;
+    %StatsOut.Ss{iTarget} = Ssstats.Smag;
+    %StatsOut.Sa{iTarget} = Sastats.Smag;
     
-    StatsOut.tMatch{iTarget} = Tstats.tMatch;
+    %StatsOut.tMatch{iTarget} = Tstats.tMatch;
     StatsOut.Epres{iTarget}  = EstatsPres.Epres;
 end
 
 %% Output
-StatsOut.L  = Lstats.L;
-StatsOut.C  = Cstats.Crms;
-StatsOut.pClipped = Pstats.pClipped;
+%StatsOut.L  = Lstats.L;
+%StatsOut.C  = Cstats.Crms;
+%StatsOut.pClipped = Pstats.pClipped;
 StatsOut.Eabs  = EstatsAbs.Eabs;
 
 % Convert luminance to % luminance
 if(exist('pixelMax', 'var') || ~isempty(pixelMax))
-    StatsOut.L = (StatsOut.L./(pixelMax)).*100;
+    %StatsOut.L = (StatsOut.L./(pixelMax)).*100;
 end
-

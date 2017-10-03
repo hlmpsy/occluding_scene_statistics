@@ -182,7 +182,59 @@ elseif(strcmp(expTypeStr, 'periphery'))
     ftemp = fopen('experiment_files/README.txt', 'w');  % Date stamp file generation.
     fprintf(ftemp, 'Experiment %s Updated: %s', expTypeStr, datestr(now,'dd.mm.yyyy-HH-MM'));
     fclose(ftemp);          
+elseif(strcmp(expTypeStr, 'periphery-additive'))    
+    % Experimental bins
+    binIndex = [5 5 1; 5 5 3; 5 5 5; 5 5 7; 5 5 9; 5 5 10];
+     
+    fpSettings = '~/experiment_files/experiment_settings';
+    fpSubjects = '~/experiment_files/subject_out';
     
+    nBins    = size(binIndex, 1);
+    nTargets = size(ImgStats.Settings.targets, 3);
+    nLevel   = 2;
+    
+    ImgStats.Settings.imgFilePathExperiment = '~/occluding/natural_images/images_pht/';    
+
+    %% Subject experiment files
+    subjectStr = ['rcw';'sps';'jsa';'yhb'];  
+    nSubjects = size(subjectStr, 1);                      
+    
+    eLvls = zeros(size(binIndex,1),nLevel, nSubjects);
+    % Eccentricity range for each level
+    eLvls(:,:,1) = [3.34,6.68;3.34,6.68;3.34,6.68;3.34,6.68;3.34,6.68;3.34,6.68];   
+    eLvls(:,:,2) = [3.34,6.68;3.34,6.68;3.34,6.68;3.34,6.68;3.34,6.68;3.34,6.68];   
+    eLvls(:,:,3) = [3.34,6.68;3.34,6.68;3.34,6.68;3.34,6.68;3.34,6.68;3.34,6.68];   
+    eLvls(:,:,4) = [3.34,6.68;3.34,6.68;3.34,6.68;3.34,6.68;3.34,6.68;3.34,6.68];   
+    
+    % Session files
+    for iBin = 1:nBins
+        for iTarget = 1:nTargets
+            ExpSettings = experiment.sessionSettings(ImgStats, expTypeStr,...
+                ImgStats.Settings.targetKey{iTarget}, binIndex(iBin,:), eLvls(iBin,:,:), nSubjects);
+            fpOut = [fpSettings '/' expTypeStr '/' ExpSettings.targetTypeStr ...
+                '/L' num2str(binIndex(iBin,1)) '_C' num2str(binIndex(iBin,2)) ...
+                '_S' num2str(binIndex(iBin,3)) '.mat'];
+            save(fpOut, 'ExpSettings');
+        end
+    end    
+    
+    targetTypeStr = ImgStats.Settings.targetKey;
+    ExpSettings.binIndex = binIndex;
+
+       
+    for iSubject = 1:nSubjects
+        for iTarget = 1:nTargets
+            SubjectExpFile = experiment.subjectExperimentFile(ExpSettings, binIndex);
+            fpOut = [fpSubjects '/' expTypeStr '/' targetTypeStr{iTarget} ...
+                '/' subjectStr(iSubject,:) '.mat']; 
+            save(fpOut, 'SubjectExpFile');
+        end
+    end
+    
+    ftemp = fopen('experiment_files/README.txt', 'w');  % Date stamp file generation.
+    fprintf(ftemp, 'Experiment %s Updated: %s', expTypeStr, datestr(now,'dd.mm.yyyy-HH-MM'));
+    fclose(ftemp);          
+            
 %% Phase Noise
 elseif(strcmp(expTypeStr, 'phase-noise'))    
     % Experimental bins

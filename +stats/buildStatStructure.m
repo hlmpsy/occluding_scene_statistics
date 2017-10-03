@@ -46,7 +46,6 @@ parfor iImg = 1:nImages
     
     % Load the image.
     I = load([filePathStr '/' D(iImg).name]);
-    
     scene = I.I_PPM;
     
     StatsOut = stats.computeSceneStats(scene, targets, ...
@@ -54,15 +53,15 @@ parfor iImg = 1:nImages
     
     
     % Save output
-    L(:,iImg)        = StatsOut.L;
-    C(:,iImg)        = StatsOut.C;
-    pClipped(:,iImg) = StatsOut.pClipped;
+    %L(:,iImg)        = StatsOut.L;
+    %C(:,iImg)        = StatsOut.C;
+    %pClipped(:,iImg) = StatsOut.pClipped;
     E(:,iImg)        = StatsOut.Eabs;
     
     for iTarget = 1:nTargets
-        Sa(:,iImg, iTarget)     = StatsOut.Sa{iTarget};
-        Ss(:,iImg, iTarget)     = StatsOut.Ss{iTarget};
-        tMatch(:,iImg, iTarget) = StatsOut.tMatch{iTarget};
+        %Sa(:,iImg, iTarget)     = StatsOut.Sa{iTarget};
+        %Ss(:,iImg, iTarget)     = StatsOut.Ss{iTarget};
+        %tMatch(:,iImg, iTarget) = StatsOut.tMatch{iTarget};
         Epres(:,iImg, iTarget)  = StatsOut.Epres{iTarget};
     end
 end
@@ -70,5 +69,3 @@ end
 %% Save output.
 ImgStats = struct('L', L, 'C', C, 'E', E, 'Epres', Epres, 'Sa', Sa, 'Ss', Ss, 'tMatch', tMatch, 'pClipped', pClipped,  ...
                   'sampleCoords', sampleCoords, 'imgDir', D, 'Settings', Settings);
-
-

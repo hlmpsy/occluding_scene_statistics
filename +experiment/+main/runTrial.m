@@ -1,4 +1,4 @@
-          function [response,responseTimeMs] = runTrial(SessionSettings, trialNumber, levelNumber)
+function [response,responseTimeMs] = runTrial(SessionSettings, trialNumber, levelNumber)
 %SINGLETRIALDETECTION Runs a single trialNumber of the detection experiment
 %
 % Example: 

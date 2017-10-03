@@ -1,4 +1,4 @@
-function StatsOut = computeSceneEdgeAbs(imIn, envelope, sampleCoords)
+function Estats = computeSceneEdgeAbs(imIn, envelope, sampleCoords)
 %%COMPUTESCENEEDGE Computes the edge response at pixel values in the image.
 %
 % Example:
@@ -35,22 +35,15 @@ nBoundary  = 56; %sum(boundary(:) > 0);
 
 %% Compute Similarity at each location in sampleCoords.
 for sItr = 1:nSamples
+    imgSmall = lib.cropImage(imIn, sampleCoords(sItr,:), patchSz, [], 1);
 
-    imgSmall       = lib.cropImage(imIn, sampleCoords(sItr,:), patchSz, [], 1);
-    
     im_x = lib.fftconv2(imgSmall(:,:,1), edgeX);
     im_y = lib.fftconv2(imgSmall(:,:,1), edgeY);
 
-    gradNorm   = sqrt(im_x.^2 + im_y.^2);
+    vecProj = abs(im_x .* normX + im_y .* normY);
+    %vecProj = sum(vecProj(:) .* boundary(:)) ./ sum(gradNorm(:) .* boundary(:));
+    vecProj = sum(vecProj(:) .* boundary(:)) ./ nBoundary;
 
-    im_cos_angle = (im_x .* normX + im_y .* normY)./gradNorm;
-    
-    im_cos_angle(isnan(im_cos_angle(:))) = 0;
-
-    tCos = sum(abs(im_cos_angle(:) .* boundary(:))) ./ nBoundary;
-    
-    tCos(isnan(tCos(:))) = 0;
-
-    StatsOut.Eabs(sItr) = tCos;   
+    Estats.Eabs(sItr) = vecProj;   
 end
 end
