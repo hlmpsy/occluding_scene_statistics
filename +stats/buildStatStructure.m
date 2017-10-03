@@ -53,15 +53,15 @@ parfor iImg = 1:nImages
     
     
     % Save output
-    %L(:,iImg)        = StatsOut.L;
-    %C(:,iImg)        = StatsOut.C;
-    %pClipped(:,iImg) = StatsOut.pClipped;
+    L(:,iImg)        = StatsOut.L;
+    C(:,iImg)        = StatsOut.C;
+    pClipped(:,iImg) = StatsOut.pClipped;
     E(:,iImg)        = StatsOut.Eabs;
     
     for iTarget = 1:nTargets
-        %Sa(:,iImg, iTarget)     = StatsOut.Sa{iTarget};
-        %Ss(:,iImg, iTarget)     = StatsOut.Ss{iTarget};
-        %tMatch(:,iImg, iTarget) = StatsOut.tMatch{iTarget};
+        Sa(:,iImg, iTarget)     = StatsOut.Sa{iTarget};
+        Ss(:,iImg, iTarget)     = StatsOut.Ss{iTarget};
+        tMatch(:,iImg, iTarget) = StatsOut.tMatch{iTarget};
         Epres(:,iImg, iTarget)  = StatsOut.Epres{iTarget};
     end
 end
